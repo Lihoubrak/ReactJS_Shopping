@@ -15,29 +15,21 @@ const Container = styled.div`
   height: 60px;
   ${mobile({ height: "50px" })}
 `;
-const Language = styled.span`
-  font-size: 14px;
-  cursor: pointer;
-  ${mobile({ display: "none" })}
-`;
 const Wrapper = styled.div`
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   ${mobile({ padding: "10px 0px" })}
 `;
-
 const Left = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
 `;
-
 const Center = styled.div`
   flex: 1;
   text-align: center;
 `;
-
 const Right = styled.div`
   flex: 1;
   display: flex;
@@ -45,22 +37,11 @@ const Right = styled.div`
   align-items: center;
   ${mobile({ flex: 2, justifyContent: "center" })}
 `;
-
-const LinkItem = styled.span`
+const Language = styled.span`
   font-size: 14px;
   cursor: pointer;
-  margin: 15px;
-  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
-
-  &:hover {
-    color: red;
-  }
+  ${mobile({ display: "none" })}
 `;
-
-const LogoutButton = styled(LinkItem)`
-  /* Additional styles specific to LogoutButton if needed */
-`;
-
 const SearchContainer = styled.div`
   border: 0.5px solid lightgray;
   display: flex;
@@ -68,16 +49,38 @@ const SearchContainer = styled.div`
   margin-left: 25px;
   padding: 5px;
 `;
-
 const Input = styled.input`
   border: none;
   outline: none;
   ${mobile({ width: "50px" })}
 `;
-
 const Logo = styled.h1`
   font-weight: bold;
   ${mobile({ fontSize: "24px" })}
+`;
+const MediaItem = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  margin: 15px;
+  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
+
+  &:hover {
+    /* Define the styles for the hover state here */
+    color: red;
+    /* Add any other styles you want for the hover state */
+  }
+`;
+const LogoutButton = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  margin: 15px;
+  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
+
+  &:hover {
+    /* Define the styles for the hover state here */
+    color: red;
+    /* Add any other styles you want for the hover state */
+  }
 `;
 
 const Navbar = () => {
@@ -87,7 +90,9 @@ const Navbar = () => {
   const user = TOKEN ? jwtDecode(TOKEN).username : null;
 
   const handleLogout = () => {
+    // Perform logout actions here, such as clearing cookies or local storage
     Cookies.remove("userInfo");
+    // You may also need to clear any state related to the logged-in user
     setCartItem(null);
     window.location.reload();
   };
@@ -111,6 +116,13 @@ const Navbar = () => {
       )
     : 0;
 
+  const handleRegisterClick = () => {
+    window.location.href = window.location.origin + "/auths/register";
+  };
+
+  const handleLoginClick = () => {
+    window.location.href = window.location.origin + "/auths/login";
+  };
   return (
     <Container>
       <Wrapper>
@@ -122,42 +134,45 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          {/* Use Link component instead of <a> tag */}
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <a href="/" style={{ textDecoration: "none" }}>
             <Logo>LAMADA.</Logo>
-          </Link>
+          </a>
         </Center>
         <Right>
           {user ? (
             <>
-              <LinkItem>{user.toUpperCase()}</LinkItem>
-              {/* Use LogoutButton styled component */}
+              <MediaItem>{user.toUpperCase()}</MediaItem>
               <LogoutButton onClick={handleLogout}>LOGOUT</LogoutButton>
             </>
           ) : (
             <>
-              {/* Use Link components for navigation */}
-              <Link to="/auths/register" style={{ textDecoration: "none" }}>
-                <LinkItem>REGISTER</LinkItem>
-              </Link>
-              <Link to="/auths/login" style={{ textDecoration: "none" }}>
-                <LinkItem>SIGN IN</LinkItem>
-              </Link>
+              <div
+                style={{ textDecoration: "none" }}
+                onClick={handleRegisterClick}
+              >
+                <MediaItem>REGISTER</MediaItem>
+              </div>
+              <div
+                style={{ textDecoration: "none" }}
+                onClick={handleLoginClick}
+              >
+                <MediaItem>SIGN IN</MediaItem>
+              </div>
             </>
           )}
-          <Link to="/cart">
-            <LinkItem>
+          <a href="/cart">
+            <MediaItem>
               <Badge color="secondary" badgeContent={totalQuantity}>
                 <ShoppingCartOutlinedIcon />
               </Badge>
-            </LinkItem>
-          </Link>
+            </MediaItem>
+          </a>
           {user ? (
-            <Link to="/orders">
-              <LinkItem>
+            <a href="/orders">
+              <MediaItem>
                 <StoreIcon />
-              </LinkItem>
-            </Link>
+              </MediaItem>
+            </a>
           ) : null}
         </Right>
       </Wrapper>
