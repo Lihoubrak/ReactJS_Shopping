@@ -15,7 +15,11 @@ const Container = styled.div`
   height: 60px;
   ${mobile({ height: "50px" })}
 `;
-
+const Language = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  ${mobile({ display: "none" })}
+`;
 const Wrapper = styled.div`
   padding: 10px 20px;
   display: flex;
