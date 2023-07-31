@@ -4,7 +4,9 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLocation } from "react-router-dom";
 
-const stripePromise = loadStripe(process.env.StripeKey);
+const stripePromise = loadStripe(
+  "pk_test_51MsVL5FC5YM2xOXYE3uMFl3IoxCrZegwlQXlgsdwtc4mOburkOdKwUhV9MgouCpjrwIQJ2ywDTASZf4kxn8Bvodw00MsKamAwc"
+);
 const Order = () => {
   const location = useLocation();
   const productOrder = location.state;
