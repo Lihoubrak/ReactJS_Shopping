@@ -30,7 +30,7 @@ const steps = ["Shopping Address", "Payment Detail"];
 
 const PaymentForm = ({ productOrder }) => {
   const [userInfo, setUserInfo] = useState({
-    username: "",
+    username: productOrder[0].username,
     email: "",
     phone: "",
     address: "",
@@ -193,7 +193,9 @@ const PaymentForm = ({ productOrder }) => {
                         style={{ marginBottom: "10px" }}
                         value={userInfo.username}
                         onChange={handleUserInfoChange}
-                        required
+                        InputProps={{
+                          readOnly: true,
+                        }}
                       />
                       <TextField
                         type="email"

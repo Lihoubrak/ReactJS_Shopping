@@ -1,8 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const BASE_URL =
-  //  "http://localhost:3000/api/";
-  "https://expressjsshopping-kh3k.onrender.com/api/";
+const BASE_URL = "http://localhost:3000/api/";
+// "https://expressjsshopping-kh3k.onrender.com/api/";
 const TOKEN = Cookies.get("userInfo");
 export const publicRequest = axios.create({
   baseURL: BASE_URL,

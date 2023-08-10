@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { publicRequest } from "../../requestMethod";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
   width: 100vw;
@@ -126,12 +127,16 @@ const Register = () => {
           password: values.password,
         });
         if (res.status === 200) {
-          alert("Create account successfully !!!");
+          Swal.fire("Good job!", "Create account successfully !!!", "success");
           navigate("/auths/login");
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          alert("User with that email or username already exists");
+          Swal.fire(
+            "Something went wrong!",
+            "User with that email or username already exists",
+            "error"
+          );
         }
         console.error(error);
       }
