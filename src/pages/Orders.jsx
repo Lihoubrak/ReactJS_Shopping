@@ -17,7 +17,6 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import styled from "styled-components";
 import { publicRequest } from "../../requestMethod";
-
 const StatusSpan = styled.span`
   font-weight: bold;
   ${({ status }) =>
@@ -27,34 +26,28 @@ const StatusSpan = styled.span`
       ? "color: orange;"
       : ""};
 `;
-
 const ITEMS_PER_PAGE = 4;
 
 const Orders = () => {
-  const [orders, setOrders] = useState({});
+  const [rowsOrder, setRowsOrder] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const TOKEN = Cookies.get("userInfo");
   const userid = TOKEN ? jwtDecode(TOKEN).id : null;
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await publicRequest.get(`/orders/find/${userid}`);
-        const ordersMap = {};
-        res.data.forEach((order) => {
-          ordersMap[order.id] = order;
-        });
-        setOrders(ordersMap);
+        setRowsOrder(res.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchOrders();
-  }, []);
+  }, [rowsOrder]);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentData = Object.values(orders).slice(startIndex, endIndex);
+  const currentData = rowsOrder.slice(startIndex, endIndex);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -65,11 +58,9 @@ const Orders = () => {
       await publicRequest.delete(`/orders/${orderId}`, {
         data: { ProductVariantId: variantId },
       });
-      setOrders((prevOrders) => {
-        const updatedOrders = { ...prevOrders };
-        delete updatedOrders[orderId];
-        return updatedOrders;
-      });
+      setRowsOrder((prevRowsOrder) =>
+        prevRowsOrder.filter((row) => row.id !== orderId)
+      );
     } catch (error) {
       console.error("Error cancelling order:", error);
     }
@@ -107,7 +98,7 @@ const Orders = () => {
             YOUR ORDER
           </div>
         </Typography>
-        {Object.keys(orders).length > 0 ? (
+        {rowsOrder.length > 0 ? (
           <div style={{ padding: "20px", width: "90%", margin: "0 auto" }}>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 700 }} aria-label="simple table">
@@ -134,8 +125,8 @@ const Orders = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody style={{ backgroundColor: "#f6f6f6" }}>
-                  {currentData.map((row) => (
-                    <TableRow key={row.id}>
+                  {currentData.map((row, index) => (
+                    <TableRow key={index}>
                       <TableCell className="tableCell" width="25%">
                         <div
                           className="cellWrapper"
@@ -191,7 +182,7 @@ const Orders = () => {
             </TableContainer>
 
             <Pagination
-              count={Math.ceil(Object.keys(orders).length / ITEMS_PER_PAGE)}
+              count={Math.ceil(rowsOrder.length / ITEMS_PER_PAGE)}
               page={currentPage}
               variant="outlined"
               shape="rounded"
@@ -209,7 +200,7 @@ const Orders = () => {
               color: "#555",
             }}
           >
-            You have not placed any orders yet!
+            You Not Yet Have Any Order !!!
           </div>
         )}
       </div>
